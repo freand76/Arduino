@@ -99,6 +99,15 @@ upload:
 			   -U flash:w:$(PROGRAM).hex:i
 		@echo '# *** Done - enjoy your sketch!'
 
-
 terminal:
 	picocom $(PORT) -b $(BAUD_RATE)
+
+library:
+	rm -f MultiShield.zip
+	rm -rf MultiShield
+	mkdir MultiShield
+	cp src/MultiShield.cpp MultiShield
+	cp src/MultiShield.h MultiShield
+	cp keywords.txt MultiShield
+	zip -r MultiShield.zip MultiShield
+	rm -rf MultiShield

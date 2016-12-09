@@ -1,3 +1,6 @@
+#ifndef MULTISHIELD_H
+#define MULTISHIELD_H
+
 #include "Arduino.h"
 #include <stdint.h>
 
@@ -110,3 +113,5 @@ private:
 };
 
 extern MultiShield Multi;
+
+#endif // MULTISHIELD_H

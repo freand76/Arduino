@@ -1,0 +1,10 @@
+MultiShield        KEYWORD1
+init               KEYWORD2
+ledState           KEYWORD2
+setLedSegment      KEYWORD2
+setLedSegmentError KEYWORD2
+clearLedSegment    KEYWORD2
+updateLedSegment   KEYWORD2
+isButtonPressed    KEYWORD2
+waitMillis         KEYWORD2
+getCurrentMillis   KEYWORD2
