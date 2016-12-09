@@ -38,11 +38,11 @@ void loop() {
     }
 
     if (Multi.isButtonPressed(BUTTON_2)) {
-	Multi.setLedSegment(0xabc9, LEDSEG_HEX);
+	Multi.setLedSegment(-10, LEDSEG_DEC);
     }
 
     if (Multi.isButtonPressed(BUTTON_3)) {
-	Multi.setLedSegment(0);
+	Multi.setLedSegmentError();
     }
 
 }

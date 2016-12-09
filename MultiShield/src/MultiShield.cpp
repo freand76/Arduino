@@ -98,10 +98,6 @@ void MultiShield::ledState(ledpin_t led, ledState_t state, uint8_t intensity) {
 
 void MultiShield::setLedSegmentDec(int32_t value) {
     if ((value > 9999) || (value < -999)) {
-	ledSegmentValue[3] = SEG_e;
-	ledSegmentValue[2] = SEG_r;
-	ledSegmentValue[1] = SEG_r;
-	ledSegmentValue[0] = SEG_EMPTY;
     } else {
 	int16_t tmp = value;
 	bool neg = false;
@@ -111,7 +107,7 @@ void MultiShield::setLedSegmentDec(int32_t value) {
 	    tmp = -tmp;
 	}
 
-	for (int idx = 0; idx < 4; idx++) {
+	for (int idx = 0; idx < NOF_SEG_SYMBOLS; idx++) {
 	    if ((tmp == 0) && (neg) && (idx != 0)) {
 		ledSegmentValue[idx] = SEG_DASH;
 		neg = false;
@@ -127,16 +123,26 @@ void MultiShield::setLedSegmentDec(int32_t value) {
 
 void MultiShield::setLedSegmentHex(int32_t value) {
     if ((value > 65535) || (value < 0)) {
-	ledSegmentValue[3] = SEG_e;
-	ledSegmentValue[2] = SEG_r;
-	ledSegmentValue[1] = SEG_r;
-	ledSegmentValue[0] = SEG_EMPTY;
+	setLedSegmentError();
     } else {
 	int16_t tmp = value;
-	for (int idx = 0; idx < 4; idx++) {
+	for (int idx = 0; idx < NOF_SEG_SYMBOLS; idx++) {
 	    ledSegmentValue[idx] = tmp & 0x0f;
 	    tmp = tmp >> 4;
 	}
+    }
+}
+
+void MultiShield::setLedSegmentError() {
+    ledSegmentValue[3] = SEG_e;
+    ledSegmentValue[2] = SEG_r;
+    ledSegmentValue[1] = SEG_r;
+    ledSegmentValue[0] = SEG_EMPTY;
+}
+
+void MultiShield::clearLedSegment() {
+    for (int idx = 0; idx < NOF_SEG_SYMBOLS; idx++) {
+	ledSegmentValue[idx] = SEG_EMPTY;
     }
 }
 
@@ -144,14 +150,15 @@ void MultiShield::setLedSegment(int32_t value, ledSegmentType_t type) {
     noInterrupts();
     switch(type) {
     case LEDSEG_DEC:
-	setLedSegmentHex(value);
+	setLedSegmentDec(value);
 	break;
     case LEDSEG_HEX:
 	setLedSegmentHex(value);
 	break;
     case LEDSEG_FLOAT:
+    case LEDSEG_CLEAR:
     default:
-	setLedSegmentHex(-1);
+	clearLedSegment();
 	break;
     }
     interrupts();

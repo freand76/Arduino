@@ -33,6 +33,7 @@ typedef enum {
     LEDSEG_DEC,
     LEDSEG_HEX,
     LEDSEG_FLOAT,
+    LEDSEG_CLEAR,
 } ledSegmentType_t;
 
 /* 0x01 - top */
@@ -75,7 +76,9 @@ typedef enum {
     SEG_DASH,
 } segsymbol_t;
 
-const uint8_t ledSegSelector[] = { 0xF8, 0xF4, 0xF2, 0xF1 };
+#define NOF_SEG_SYMBOLS 4
+
+const uint8_t ledSegSelector[NOF_SEG_SYMBOLS] = { 0xF8, 0xF4, 0xF2, 0xF1 };
 const uint8_t ledPinSelector[NOF_LEDS] = { 13, 12, 11, 10 };
 const uint8_t buttonPinSelector[NOF_BUTTONS] = { A1, A2, A3 };
 
@@ -86,6 +89,8 @@ public:
     void ledState(ledpin_t led, ledState_t state, uint8_t intensity = 0xff);
     /* LED Segment Display */
     void setLedSegment(int32_t value, ledSegmentType_t type = LEDSEG_DEC);
+    void setLedSegmentError();
+    void clearLedSegment();
     void updateLedSegment();
     /* Buttons */
     bool isButtonPressed(buttonpin_t button);
@@ -101,7 +106,7 @@ public:
 private:
     void setLedSegmentDec(int32_t value);
     void setLedSegmentHex(int32_t value);
-    volatile int8_t ledSegmentValue[4];
+    volatile int8_t ledSegmentValue[NOF_SEG_SYMBOLS];
 };
 
 extern MultiShield Multi;
