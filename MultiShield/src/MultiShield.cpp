@@ -1,6 +1,4 @@
 #include "MultiShield.h"
-#include <stdbool.h>
-#include <stdint.h>
 
 MultiShield Multi;
 
@@ -96,7 +94,7 @@ void MultiShield::ledState(ledpin_t led, ledState_t state, uint8_t intensity) {
     }
 }
 
-void MultiShield::setLedSegmentDec(int32_t value) {
+void MultiShield::setLedSegment(int32_t value) {
     if ((value > 9999) || (value < -999)) {
     } else {
 	int16_t tmp = value;
@@ -146,26 +144,8 @@ void MultiShield::clearLedSegment() {
     }
 }
 
-void MultiShield::setLedSegment(int32_t value, ledSegmentType_t type) {
-    noInterrupts();
-    switch(type) {
-    case LEDSEG_DEC:
-	setLedSegmentDec(value);
-	break;
-    case LEDSEG_HEX:
-	setLedSegmentHex(value);
-	break;
-    case LEDSEG_FLOAT:
-    case LEDSEG_CLEAR:
-    default:
-	clearLedSegment();
-	break;
-    }
-    interrupts();
-}
-
 void MultiShield::updateLedSegment() {
-    uint8_t ledSegmentPos = Multi.millisCounter & 0x03;
+    uint8_t ledSegmentPos = millisCounter & 0x03;
 
     digitalWrite(LEDSEG_LATCH, LOW);
     shiftOut(LEDSEG_DATA, LEDSEG_CLK, MSBFIRST, ledSegValToSegment[ledSegmentValue[ledSegmentPos]]);

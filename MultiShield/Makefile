@@ -7,13 +7,16 @@ BAUD_RATE=115200
 
 ARDUINO_CORE=$(ARDUINO_DIR)/hardware/arduino/cores/arduino
 ARDUINO_VARIANT=$(ARDUINO_DIR)/hardware/arduino/variants/standard
+ARDUINO_LIBRARY=$(ARDUINO_DIR)/libraries/
 AVR_INCLUDE=/usr/lib/avr/include
 
 INCLUDE= \
 	-I. \
 	-I$(ARDUINO_CORE) \
 	-I$(ARDUINO_VARIANT) \
-	-I$(AVR_INCLUDE)
+	-I$(AVR_INCLUDE) \
+	-I$(ARDUINO_LIBRARY)/Wire \
+	-I$(ARDUINO_LIBRARY)/Wire/utility
 
 BUILD_DIR=.build
 
@@ -44,6 +47,12 @@ CORE_CPP_FILES= HardwareSerial.cpp \
                 WMath.cpp \
                 WString.cpp
 
+LIBRARY_CPP_FILES = \
+		Wire/Wire.cpp
+
+LIBRARY_C_FILES = \
+		Wire/utility/twi.c
+
 ## FILES in /src
 CPP_FILES = \
 	TestShield.cpp \
@@ -51,7 +60,9 @@ CPP_FILES = \
 
 OBJ_FILES =
 OBJ_FILES += $(addprefix $(BUILD_DIR)/,$(CORE_C_FILES:.c=.o))
+OBJ_FILES += $(addprefix $(BUILD_DIR)/,$(notdir $(LIBRARY_C_FILES:.c=.o)))
 OBJ_FILES += $(addprefix $(BUILD_DIR)/,$(CORE_CPP_FILES:.cpp=.o))
+OBJ_FILES += $(addprefix $(BUILD_DIR)/,$(notdir $(LIBRARY_CPP_FILES:.cpp=.o)))
 OBJ_FILES += $(addprefix $(BUILD_DIR)/,$(CPP_FILES:.cpp=.o))
 
 PROGRAM := $(addprefix $(BUILD_DIR)/,$(PROGRAM))
@@ -65,6 +76,8 @@ clean:
 vpath %.cpp src/
 vpath %.c  $(ARDUINO_CORE)/
 vpath %.cpp $(ARDUINO_CORE)/
+vpath %.cpp $(ARDUINO_LIBRARY)/Wire
+vpath %.c  $(ARDUINO_LIBRARY)/Wire/utility
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)

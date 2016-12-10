@@ -1,4 +1,5 @@
 MultiShield        KEYWORD1
+Multi              KEYWORD1
 init               KEYWORD2
 ledState           KEYWORD2
 setLedSegment      KEYWORD2

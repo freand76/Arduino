@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 #define BUZZER_PIN 3
 
@@ -31,13 +32,6 @@ typedef enum {
     LEDSEG_CLK = 7,
     LEDSEG_DATA = 8,
 } ledSegmentPin_t;
-
-typedef enum {
-    LEDSEG_DEC,
-    LEDSEG_HEX,
-    LEDSEG_FLOAT,
-    LEDSEG_CLEAR,
-} ledSegmentType_t;
 
 /* 0x01 - top */
 /* 0x02 - top-right */
@@ -91,7 +85,8 @@ public:
     /* LED */
     void ledState(ledpin_t led, ledState_t state, uint8_t intensity = 0xff);
     /* LED Segment Display */
-    void setLedSegment(int32_t value, ledSegmentType_t type = LEDSEG_DEC);
+    void setLedSegment(int32_t value);
+    void setLedSegmentHex(int32_t value);
     void setLedSegmentError();
     void clearLedSegment();
     void updateLedSegment();
@@ -107,8 +102,6 @@ public:
     volatile uint8_t ledIntensity[NOF_LEDS];
     volatile uint8_t ledCounter[NOF_LEDS];
 private:
-    void setLedSegmentDec(int32_t value);
-    void setLedSegmentHex(int32_t value);
     volatile int8_t ledSegmentValue[NOF_SEG_SYMBOLS];
 };
 
